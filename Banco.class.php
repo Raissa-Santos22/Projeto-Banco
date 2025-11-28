@@ -1,33 +1,33 @@
 <?php
 
 class Banco {
+
+    private $pdo;
     public function conectar(){
         try {
             $dbname = "mysql:dbname=caixaeletronico;  host=localhost";
             $dbUser = "root";
             $dbPass = "";
 
-            $pdo = new PDO($dbname. $dbUser, $dbPass);
+            $this->pdo = new PDO($dbname, $dbUser, $dbPass);
             return true;
         } catch (exception $e) {
-            return false;
-            exit;   
+            return false; 
         }
     }
 
     public function localizarTitular( $id ){
         $sql = "SELECT * FROM contas WHERE id = :id";
-        $cmd = $pdo->prepare($sql);
-        $cmd-> bindValue(":id", $id);
+        $sql = $this-> pdo->prepare($sql);
+        $sql-> bindValue(":id", $id);
 
-        $cmd -> execute();
-        if( $cmd->rowCount() > 0){
-            $dados = $cmd->fetch();
-            return $dados;
+        $sql -> execute();
+
+        if($sql->rowCount() > 0){
+            $dados = $sql->fetch();
         }else{
             return array();
         }
+        return $dados;
     }
-
-
 }
